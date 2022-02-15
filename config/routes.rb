@@ -1,12 +1,14 @@
 Rails.application.routes.draw do
 
-  root 'homes#top'
   devise_for :users
+  root to: "homes#top"
+  get "/homes/about" => "homes#about", as: "about"
 
-  resources :post_images, only: [:new, :create, :index, :show, :destroy]
-  get 'homes/about'=>'homes#about' ,as:'about'
+  resources :post_images, only: [:new, :create, :index, :show, :destroy] do
+    resource :favorites, only: [:create, :destroy]
 
-    # 以下の行のonly: []内にupdateを追加
+    resources :post_comments, only: [:create, :destroy]
+  end
   resources :users, only: [:show, :edit, :update]
 
-end
+  end
